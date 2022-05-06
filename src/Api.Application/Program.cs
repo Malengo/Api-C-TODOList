@@ -18,6 +18,8 @@ builder.Services.AddTransient<IListService, ListService>();
 builder.Services.AddTransient<ITaskService, TaskService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IImplementionList, ImplementionListService>();
+builder.Services.AddTransient<IUserLogon, LoginService>();
+builder.Services.AddScoped<IUserLogonRepository, UserImplementation>();
 builder.Services.AddScoped<IListRepository, ListImplemention>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
