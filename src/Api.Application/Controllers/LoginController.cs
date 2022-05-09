@@ -1,5 +1,5 @@
 using System.Net;
-using Api.Domain.Entities;
+using Api.Domain.Dtos;
 using Api.Domain.Interfaces.Service.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,15 +17,15 @@ namespace Api.Application.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Login([FromBody] UserEntity user)
+        public async Task<object> Login([FromBody] LoginDto login)
         {
-            if (user == null)
+            if (login == null)
             {
                 return BadRequest();
             }
             try
             {
-                var result = await _service.FindByEmail(user);
+                var result = await _service.FindByEmail(login);
                 if (result != null)
                 {
                     return Ok(result);

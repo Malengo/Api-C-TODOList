@@ -1,4 +1,4 @@
-using Api.Domain.Entities;
+using Api.Domain.Dtos;
 using Api.Domain.Interfaces.Repository;
 using Api.Domain.Interfaces.Service.User;
 
@@ -13,7 +13,7 @@ namespace Api.Service.Service
             _repository = repository;
         }
 
-        public async Task<object> FindByEmail(UserEntity user)
+        public async Task<object> FindByEmail(LoginDto user)
         {
             if (user != null)
             {
