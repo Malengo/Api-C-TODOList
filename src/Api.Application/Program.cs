@@ -7,8 +7,10 @@ using Api.Domain.Interfaces.Service.Category;
 using Api.Domain.Interfaces.Service.List;
 using Api.Domain.Interfaces.Service.Task;
 using Api.Domain.Interfaces.Service.User;
+using Api.Domain.Security;
 using Api.Service.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,17 @@ builder.Services.AddTransient<IUserLogon, LoginService>();
 builder.Services.AddScoped<IUserLogonRepository, UserImplementation>();
 builder.Services.AddScoped<IListRepository, ListImplemention>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+var signingConfiguration = new SigningConfiguration();
+builder.Services.AddSingleton(signingConfiguration);
+
+var tokenConfiguration = new TokenConfiguration();
+new ConfigureFromConfigurationOptions<TokenConfiguration>(
+    builder.Configuration.GetSection("TokenConfigurations"))
+    .Configure(tokenConfiguration);
+
+builder.Services.AddSingleton(tokenConfiguration);
+
 
 
 
