@@ -1,5 +1,6 @@
 using System.Net;
 using Api.Domain.Interfaces.Service.List;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Application.Controllers
@@ -15,6 +16,7 @@ namespace Api.Application.Controllers
             _service = service;
         }
 
+        [Authorize("Bearer")]
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult> GetListById(Guid id)
@@ -29,6 +31,8 @@ namespace Api.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Authorize("Bearer")]
         [HttpGet]
         [Route("name/{name}")]
         public async Task<ActionResult> GetListByName(string name)

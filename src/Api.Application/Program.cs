@@ -9,6 +9,8 @@ using Api.Domain.Interfaces.Service.Task;
 using Api.Domain.Interfaces.Service.User;
 using Api.Domain.Security;
 using Api.Service.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -35,6 +37,29 @@ new ConfigureFromConfigurationOptions<TokenConfiguration>(
 
 builder.Services.AddSingleton(tokenConfiguration);
 
+builder.Services.AddAuthentication(authOptions =>
+{
+    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+).AddJwtBearer(bearerOptions =>
+    {
+        var paramsValidation = bearerOptions.TokenValidationParameters;
+        paramsValidation.IssuerSigningKey = signingConfiguration.Key;
+        paramsValidation.ValidAudience = tokenConfiguration.Audience;
+        paramsValidation.ValidIssuer = tokenConfiguration.Issuer;
+        paramsValidation.ValidateIssuerSigningKey = true;
+        paramsValidation.ValidateLifetime = true;
+        paramsValidation.ClockSkew = TimeSpan.Zero;
+    }
+);
+
+builder.Services.AddAuthorization(auth =>
+{
+    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+    .RequireAuthenticatedUser().Build());
+});
 
 
 

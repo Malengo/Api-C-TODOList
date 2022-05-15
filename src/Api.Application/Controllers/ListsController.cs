@@ -1,6 +1,7 @@
 using System.Net;
 using Api.Domain.Entities;
 using Api.Domain.Interfaces.Service.List;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Application.Controllers
@@ -15,6 +16,8 @@ namespace Api.Application.Controllers
         {
             _service = service;
         }
+
+        [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -28,6 +31,8 @@ namespace Api.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Authorize("Bearer")]
         [HttpGet]
         [Route("{id}", Name = "GetListById")]
         public async Task<ActionResult> GetListById(Guid id)
@@ -43,7 +48,7 @@ namespace Api.Application.Controllers
             }
         }
 
-
+        [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult> AddList([FromBody] ListEntity list)
         {
@@ -65,6 +70,7 @@ namespace Api.Application.Controllers
             }
         }
 
+        [Authorize("Bearer")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult> DeleteList(Guid id)
@@ -87,6 +93,7 @@ namespace Api.Application.Controllers
             }
         }
 
+        [Authorize("Bearer")]
         [HttpPut]
         public async Task<ActionResult> UpdateList([FromBody] ListEntity list)
         {
